@@ -24,7 +24,7 @@ CREATE TABLE `writing` (
   `heading` varchar(255) NOT NULL,
   `content` varchar(255) NOT NULL,
   `author` varchar(255) NOT NULL,
-  `inittime` bigint(20) NOT NULL,
-  `changetime` bigint(20) NOT NULL,
+  `initTime` bigint(20) NOT NULL,
+  `changeTime` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

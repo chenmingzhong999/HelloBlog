@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.evercodig.helloblog.dao.WritingDao">
+    <resultMap id="BaseResultMap" type="net.evercodig.helloblog.pojo.Writing">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="Integer"/>
+            <arg column="heading" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="author" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="initTime" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="changeTime" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, heading, content, author, initTime, changeTime
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from writing
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from writing
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="net.evercodig.helloblog.pojo.Writing">
+    insert into writing (id, heading, content, 
+      author, initTime, changeTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{heading,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{author,jdbcType=VARCHAR}, #{inittime,jdbcType=BIGINT}, #{changetime,jdbcType=BIGINT}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="net.evercodig.helloblog.pojo.Writing">
+        insert into writing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="heading != null">
+                heading,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="author != null">
+                author,
+            </if>
+            <if test="inittime != null">
+                initTime,
+            </if>
+            <if test="changetime != null">
+                changeTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="heading != null">
+                #{heading,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="author != null">
+                #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="inittime != null">
+                #{inittime,jdbcType=BIGINT},
+            </if>
+            <if test="changetime != null">
+                #{changetime,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.evercodig.helloblog.pojo.Writing">
+        update writing
+        <set>
+            <if test="heading != null">
+                heading = #{heading,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="author != null">
+                author = #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="inittime != null">
+                initTime = #{inittime,jdbcType=BIGINT},
+            </if>
+            <if test="changetime != null">
+                changeTime = #{changetime,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.evercodig.helloblog.pojo.Writing">
+    update writing
+    set heading = #{heading,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      initTime = #{inittime,jdbcType=BIGINT},
+      changeTime = #{changetime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByAuthorAndHeading" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+            writing
+        WHERE
+        <if test="author != null">
+            author like "%"#{author,jdbcType=VARCHAR}"%"
+        </if>
+        OR
+        <if test="heading != null">
+            heading like "%"#{heading,jdbcType=VARCHAR}"%"
+        </if>
+    </select>
+    <select id="selectTotalCount" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM
+          writing
+    </select>
+    <select id="selectWritingPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM
+          writing limit #{begin} , #{limit}
+    </select>
+</mapper>
