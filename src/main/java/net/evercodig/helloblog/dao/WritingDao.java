@@ -1,6 +1,7 @@
 package net.evercodig.helloblog.dao;
 
 import net.evercodig.helloblog.pojo.Writing;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,5 +25,5 @@ public interface WritingDao {
 
     int selectTotalCount();
 
-    List<Writing> selectWritingPage(Map limitMap);
+    List<Writing> selectWritingPage(@Param("begin") Integer begin, @Param("limit") Integer limit);
 }

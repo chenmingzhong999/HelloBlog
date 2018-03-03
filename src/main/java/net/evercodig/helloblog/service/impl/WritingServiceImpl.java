@@ -5,6 +5,8 @@ import net.evercodig.helloblog.pojo.PageBean;
 import net.evercodig.helloblog.pojo.Writing;
 import net.evercodig.helloblog.pojo.WritingVO;
 import net.evercodig.helloblog.service.WritingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.Map;
 @Service
 @Transactional
 public class WritingServiceImpl implements WritingService {
+    public static final Logger logger = LoggerFactory.getLogger(WritingServiceImpl.class);
 
     @Autowired
     WritingDao writingDao;
@@ -23,6 +26,7 @@ public class WritingServiceImpl implements WritingService {
     @Override
     public Writing selectWritingById(int id) {
         Writing writing = writingDao.selectByPrimaryKey(id);
+        logger.info("根据id查询记录", writing);
         return writing;
     }
 
@@ -33,6 +37,7 @@ public class WritingServiceImpl implements WritingService {
         findMap.put("heading", heading);
         System.out.println(findMap);
         List<Writing> writings = writingDao.selectByAuthorAndHeading(findMap);
+        logger.info("根据作者标题查询记录{}",writings);
         return writings;
     }
 
@@ -46,7 +51,7 @@ public class WritingServiceImpl implements WritingService {
         writing.setChangetime(System.currentTimeMillis());
 
         int i = writingDao.insert(writing);
-        System.out.println(i);
+        logger.info("文章保存{}", i);
     }
 
     @Override
@@ -58,7 +63,7 @@ public class WritingServiceImpl implements WritingService {
         writing.setAuthor(writingVO.getAuthor());
         writing.setChangetime(System.currentTimeMillis());
         int i = writingDao.updateByPrimaryKeySelective(writing);
-        System.out.println(i);
+        logger.info("文章更新{}",i);
     }
 
     @Override
@@ -75,10 +80,7 @@ public class WritingServiceImpl implements WritingService {
         //计算 从第几条开始
         int begin = (page - 1) * limit;
         //查询记录
-        final HashMap<String, Integer> limitMap = new HashMap<String, Integer>();
-        limitMap.put("begin", begin);
-        limitMap.put("limit", limit);
-        List<Writing> writings = writingDao.selectWritingPage(limitMap);
+        List<Writing> writings = writingDao.selectWritingPage(begin, limit);
         //封装分页实体
         PageBean<Writing> writingPageBean = new PageBean<>();
         writingPageBean.setLimit(limit);
@@ -86,9 +88,7 @@ public class WritingServiceImpl implements WritingService {
         writingPageBean.setTotalCount(totalCount);
         writingPageBean.setTotalPage(totalPage);
         writingPageBean.setList(writings);
-
+        logger.info("分页查询实体{}", writingPageBean);
         return writingPageBean;
     }
-
-
 }

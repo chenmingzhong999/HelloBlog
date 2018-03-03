@@ -125,10 +125,10 @@
         FROM
           writing
     </select>
-    <select id="selectWritingPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+    <select id="selectWritingPage" resultMap="BaseResultMap" >
         SELECT
           <include refid="Base_Column_List"/>
         FROM
-          writing limit #{begin} , #{limit}
+          writing order BY initTime desc limit #{begin} , #{limit}
     </select>
 </mapper>
