@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class IndexController {
     @RequestMapping(method = RequestMethod.GET)
     public String index(){
-        return "index1111122222";
+        return "index11111333";
     }
 }
